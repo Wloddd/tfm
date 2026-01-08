@@ -62,7 +62,8 @@ jobs:
         run: |
           rm -rf ./output
           mkdir output
-          cp -rf * ./output/
+          cp *.tf* ./output/
+          cp *result* ./output/
       - name: Commit files # commit the output folder
         run: |
           git config --local user.email "test@github.com"
