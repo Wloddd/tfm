@@ -26,9 +26,12 @@ jobs:
         run: |
           terraform --version
           lsb_release -a
+  
   # running actual tf script
   tf-apply:
     runs-on: ubuntu-22.04
+    permissions:
+      contents: write    
     steps:
       - uses: actions/checkout@v4
       # - name: check the terraform version
