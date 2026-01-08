@@ -57,5 +57,19 @@ jobs:
       - name: ls
         run: ls -al
 
-
+      # copy output back to the repo
+      - name: push output
+        run: |
+          mkdir -p output
+          yes| cp -rf * ./output/
+      - name: Commit files # commit the output folder
+        run: |
+          git config --local user.email "test@github.com"
+          git config --local user.name "GitHub Action test"
+          git add ./output
+          git commit -m "Add changes"
+      - name: Push changes # push the output folder to your repo
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
         
