@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: basic terraform workflow
 
 # Controls when the workflow will run
 on:
@@ -34,12 +34,13 @@ jobs:
       contents: write    
     steps:
       - uses: actions/checkout@v4
-      # - name: check the terraform version
-      #   run: terraform --version
-      # - name: apply terraform tf script
-      #   run: |
-      #    terraform init
-      #    terraform plan
+      - name: check the terraform version
+        run: terraform --version
+      - name: terraform installation check 
+        run: |
+          terraform --version
+          lsb_release -a
+
       # Initialize existing Terraform working directory 
       - name: Terraform Init
         run: terraform init
@@ -73,7 +74,7 @@ jobs:
           git config --local user.name "GitHub Action test"
           git add ./output
           git commit -m "Add changes"
-      - name: Push changes # push the output folder to your repo
+      - name: push output back to the repo
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
