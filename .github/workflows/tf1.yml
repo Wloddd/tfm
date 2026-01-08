@@ -60,8 +60,9 @@ jobs:
       # copy output back to the repo
       - name: push output
         run: |
-          mkdir -p output
-          yes| cp -rf * ./output/
+          rm -rf ./output
+          mkdir output
+          cp * ./output/
       - name: Commit files # commit the output folder
         run: |
           git config --local user.email "test@github.com"
