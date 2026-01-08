@@ -52,3 +52,10 @@ jobs:
       - name: Terraform Apply
         if: github.event_name == 'push'
         run: terraform apply -auto-approve -input=false
+
+      # verify output file's existence
+      - name: ls
+        run: ls -al
+
+
+        
