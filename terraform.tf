@@ -12,5 +12,5 @@ provider "local" {}
 # Create local file
 resource "local_file" "example_file" {
   content  = "THIS IS CONTENT OF THE LOCAL FILE"
-  filename = "./my-homework-results.txt" 
+  filename = "./my-homework-results-2.txt" 
 }
