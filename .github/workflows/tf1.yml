@@ -15,8 +15,8 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
+  # This workflow contains a single job called "tf-check"
+  tf-check:
     # The type of runner that the job will run on
     runs-on: ubuntu-22.04
 
@@ -30,7 +30,7 @@ jobs:
         run: terraform --version
 
       # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: terraform installation check
         run: |
-          echo line1
-          echo line2
+          terraform --version
+          lsb_release -a
