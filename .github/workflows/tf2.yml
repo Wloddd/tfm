@@ -1,0 +1,80 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # checking terraform installation
+  tf-check:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: check the terraform version
+        run: terraform --version
+      - name: terraform installation check 
+        run: |
+          terraform --version
+          lsb_release -a
+  
+  # running actual tf script
+  tf-apply:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write    
+    steps:
+      - uses: actions/checkout@v4
+      # - name: check the terraform version
+      #   run: terraform --version
+      # - name: apply terraform tf script
+      #   run: |
+      #    terraform init
+      #    terraform plan
+      # Initialize existing Terraform working directory 
+      - name: Terraform Init
+        run: terraform init
+      # Checks that all Terraform configuration files adhere to a canonical format
+      # - name: Terraform Format
+      #   run: terraform fmt -check
+      # Generates an execution plan for Terraform
+      - name: Terraform Plan
+        run: terraform plan -input=false
+
+      # On push to "main", build or change infrastructure according to Terraform configuration files
+      # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
+      - name: Terraform Apply
+        if: github.event_name == 'push'
+        run: terraform apply -auto-approve -input=false
+
+      # verify output file's existence
+      - name: ls
+        run: ls -al
+
+      # copy output back to the repo
+      - name: push output
+        run: |
+          rm -rf ./output
+          mkdir output
+          cp *.tf* ./output/
+          cp *result* ./output/
+      - name: Commit files # commit the output folder
+        run: |
+          git config --local user.email "test@github.com"
+          git config --local user.name "GitHub Action test"
+          git add ./output
+          git commit -m "Add changes"
+      - name: Push changes # push the output folder to your repo
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+        
